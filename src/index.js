@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import app from './app.js';
 
 const PORT = process.env.PORT || 3000;
-const DB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/oauth_db';
+const DB_URI = process.env.MONGODB_URI;
 
 // Connect to Database and start server
 mongoose
