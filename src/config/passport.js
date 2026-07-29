@@ -1,4 +1,6 @@
 import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcryptjs";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as FacebookStrategy } from "passport-facebook";
 import { Strategy as OpenIDConnectStrategy } from "passport-openidconnect";
@@ -24,6 +26,33 @@ passport.deserializeUser(async (id, done) => {
     done(err, null);
   }
 });
+
+// --- Local Strategy (Email & Password Sign In) ---
+passport.use(
+  new LocalStrategy(
+    { usernameField: "email", passwordField: "password" },
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ email: email.toLowerCase() });
+        if (!user) {
+          return done(null, false, { message: "Invalid email or password" });
+        }
+        if (!user.password) {
+          return done(null, false, { message: "Account created via Social OAuth. Please sign in with provider." });
+        }
+        
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+          return done(null, false, { message: "Invalid email or password" });
+        }
+
+        return done(null, user);
+      } catch (err) {
+        return done(err);
+      }
+    }
+  )
+);
 
 const handleOAuthUser = async (accessToken, refreshToken, profile, done) => {
   try {
@@ -229,7 +258,6 @@ passport.use(
 );
 
 // --- X (Twitter) OAuth 2.0 Strategy ---
-
 passport.use(
   new TwitterStrategy(
     {
@@ -237,7 +265,7 @@ passport.use(
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
       clientType: "confidential",
       callbackURL: process.env.TWITTER_CALLBACK_URL,
-      scope: ["users.read", "tweet.read", "offline.access"], // 👈 ADD SCOPE HERE DIRECTLY
+      scope: ["users.read", "tweet.read", "offline.access"],
     },
     async (accessToken, refreshToken, profile, done) => {
       try {

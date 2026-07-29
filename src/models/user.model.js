@@ -4,12 +4,13 @@ const userSchema = new mongoose.Schema(
   {
     providerId: {
       type: String,
-      required: true,
       unique: true,
+      sparse: true, // Allows null/undefined for local users while keeping uniqueness for OAuth users
     },
     provider: {
-      type: String, // 'google', 'facebook', 'github', 'linkedin', 'spotify', 'discord', 'slack'
+      type: String, // 'local', 'google', 'facebook', 'github', etc.
       required: true,
+      default: "local",
     },
     displayName: {
       type: String,
@@ -17,16 +18,21 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
+      required: true,
+      unique: true,
       lowercase: true,
       trim: true,
     },
+    password: {
+      type: String, // Hashed password for local auth
+    },
+    avatar: String,
     spotifyId: String,
     discordId: String,
     slackId: String,
-    avatar: String,
     twitterId: String,
     twitchId: String,
-    avatar: String,
+    gitlabId: String,
   },
   { timestamps: true }
 );

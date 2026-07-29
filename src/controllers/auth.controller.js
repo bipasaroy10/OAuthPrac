@@ -1,9 +1,40 @@
+import bcrypt from "bcryptjs";
+import User from "../models/user.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 
+// Handle local register
+export const registerUser = asyncHandler(async (req, res) => {
+  const { displayName, email, password } = req.body;
+
+  if (!email || !password) {
+    throw new ApiError(400, "Email and password are required.");
+  }
+
+  const existingUser = await User.findOne({ email: email.toLowerCase() });
+  if (existingUser) {
+    throw new ApiError(400, "User with this email already exists.");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await User.create({
+    displayName: displayName || email.split("@")[0],
+    email: email.toLowerCase(),
+    password: hashedPassword,
+    provider: "local",
+  });
+
+  req.login(user, (err) => {
+    if (err) {
+      throw new ApiError(500, "Login after registration failed.");
+    }
+    return res.redirect("/dashboard");
+  });
+});
+
 export const handleOAuthCallbackSuccess = asyncHandler(async (req, res) => {
-  // Redirect browser to dashboard on successful OAuth callback
   return res.redirect("/dashboard");
 });
 
@@ -18,7 +49,6 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
     if (err) {
       throw new ApiError(500, "Logout failed", [err.message]);
     }
-    // Destroy session and redirect to login page
     req.session.destroy(() => {
       res.clearCookie("connect.sid");
       return res.redirect("/");

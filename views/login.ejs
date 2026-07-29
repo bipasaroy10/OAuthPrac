@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Practice Web App</title>
+  <title>Authentication - Practice Web App</title>
   <!-- Font Awesome CDN for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/style.css">
@@ -11,49 +11,114 @@
 <body class="dark-theme">
   <div class="auth-card">
     <div class="header">
-      <!-- Default Profile Avatar Placeholder -->
       <div class="avatar-placeholder">
         <i class="fa-solid fa-user"></i>
       </div>
       <h1>Practice Web App</h1>
-      <p class="subtitle">Sign in to continue</p>
+      <p class="subtitle" id="form-subtitle">Sign in to continue</p>
     </div>
 
+    <!-- Toggle Tabs for Sign In / Sign Up -->
+    <div class="auth-tabs">
+      <button type="button" class="tab-btn active" id="signin-tab" onclick="switchTab('signin')">Sign In</button>
+      <button type="button" class="tab-btn" id="signup-tab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- Sign In Form -->
+    <form action="/auth/login" method="POST" id="signin-form" class="auth-form active">
+      <div class="input-group">
+        <i class="fa-solid fa-envelope input-icon"></i>
+        <input type="email" name="email" placeholder="Email Address" required />
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input type="password" name="password" placeholder="Password" required />
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+      </button>
+    </form>
+
+    <!-- Sign Up Form -->
+    <form action="/auth/register" method="POST" id="signup-form" class="auth-form">
+      <div class="input-group">
+        <i class="fa-solid fa-user input-icon"></i>
+        <input type="text" name="displayName" placeholder="Full Name" required />
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-envelope input-icon"></i>
+        <input type="email" name="email" placeholder="Email Address" required />
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock input-icon"></i>
+        <input type="password" name="password" placeholder="Create Password" required />
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-user-plus"></i> Create Account
+      </button>
+    </form>
+
+    <div class="divider">
+      <span>OR CONTINUE WITH</span>
+    </div>
+
+    <!-- OAuth Social Buttons -->
     <div class="auth-buttons">
-      <!-- Original Providers -->
       <a href="/auth/google" class="btn btn-google">
-        <i class="fa-brands fa-google"></i> Sign in with Google
+        <i class="fa-brands fa-google"></i> Google
       </a>
       <a href="/auth/facebook" class="btn btn-facebook">
-        <i class="fa-brands fa-facebook"></i> Sign in with Facebook
+        <i class="fa-brands fa-facebook"></i> Facebook
       </a>
-
-      <!-- Additional Requested Providers -->
       <a href="/auth/twitter" class="btn btn-x">
-        <i class="fa-brands fa-x-twitter"></i> Sign in with X
+        <i class="fa-brands fa-x-twitter"></i> X
       </a>
       <a href="/auth/spotify" class="btn btn-spotify">
-        <i class="fa-brands fa-spotify"></i> Sign in with Spotify
+        <i class="fa-brands fa-spotify"></i> Spotify
       </a>
       <a href="/auth/discord" class="btn btn-discord">
-        <i class="fa-brands fa-discord"></i> Sign in with Discord
+        <i class="fa-brands fa-discord"></i> Discord
       </a>
       <a href="/auth/linkedin" class="btn btn-linkedin">
-        <i class="fa-brands fa-linkedin-in"></i> Sign in with LinkedIn
+        <i class="fa-brands fa-linkedin-in"></i> LinkedIn
       </a>
       <a href="/auth/slack" class="btn btn-slack">
-        <i class="fa-brands fa-slack"></i> Sign in with Slack
+        <i class="fa-brands fa-slack"></i> Slack
       </a>
       <a href="/auth/twitch" class="btn btn-twitch">
-        <i class="fa-brands fa-twitch"></i> Sign in with Twitch
+        <i class="fa-brands fa-twitch"></i> Twitch
       </a>
       <a href="/auth/github" class="btn btn-github">
-        <i class="fa-brands fa-github"></i> Sign in with GitHub
+        <i class="fa-brands fa-github"></i> GitHub
       </a>
       <a href="/auth/gitlab" class="btn btn-gitlab">
-        <i class="fa-brands fa-gitlab"></i> Sign in with GitLab
+        <i class="fa-brands fa-gitlab"></i> GitLab
       </a>
     </div>
   </div>
+
+  <script>
+    function switchTab(tab) {
+      const signinTab = document.getElementById('signin-tab');
+      const signupTab = document.getElementById('signup-tab');
+      const signinForm = document.getElementById('signin-form');
+      const signupForm = document.getElementById('signup-form');
+      const subtitle = document.getElementById('form-subtitle');
+
+      if (tab === 'signin') {
+        signinTab.classList.add('active');
+        signupTab.classList.remove('active');
+        signinForm.classList.add('active');
+        signupForm.classList.remove('active');
+        subtitle.textContent = 'Sign in to continue';
+      } else {
+        signupTab.classList.add('active');
+        signinTab.classList.remove('active');
+        signupForm.classList.add('active');
+        signinForm.classList.remove('active');
+        subtitle.textContent = 'Create a new account';
+      }
+    }
+  </script>
 </body>
 </html>
