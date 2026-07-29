@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import passport from "./config/passport.js";
 import { ApiError } from "./utils/ApiError.js";
-import authRouter from "./routes/auth.route.js";
+import authRouter from "./routes/auth.route.js"; // Ensure filename matches auth.route.js or auth.routes.js
 
 const app = express();
 
@@ -18,6 +18,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: false,               // Set to true if running over HTTPS
+      sameSite: "lax",             // Ensures session cookies persist across OAuth redirects
     },
   })
 );
@@ -31,6 +33,9 @@ app.use("/auth", authRouter);
 
 // Global Error Handling Middleware using ApiError
 app.use((err, req, res, next) => {
+  // 🔴 CRITICAL: Log the error stack to the terminal console so you can debug!
+  console.error("Backend Error Caught:", err);
+
   let error = err;
 
   if (!(error instanceof ApiError)) {

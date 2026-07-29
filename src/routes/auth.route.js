@@ -9,63 +9,64 @@ import { isAuthenticated } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-// --- Google Auth Routes ---
-// routes/auth.routes.js
+// --- Google Routes ---
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
 
-// 1. Initiate Google Login (MUST include scope)
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-// 2. Google Callback Handling
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  handleOAuthCallbackSuccess
-);
-
-// --- Facebook Auth Routes ---
-// Request public_profile and email scope
-router.get(
-  "/facebook",
-  passport.authenticate("facebook", { scope: ["public_profile"] })
-);
-
-router.get(
-  "/facebook/callback",
-  passport.authenticate("facebook", { failureRedirect: "/login" }),
-  handleOAuthCallbackSuccess
-);
-
-// --- Microsoft Auth Routes ---
-// router.get("/microsoft", passport.authenticate("microsoft"));
-
-// router.get(
-//   "/microsoft/callback",
-//   passport.authenticate("microsoft", { failureRedirect: "/login" }),
-//   handleOAuthCallbackSuccess
-// );
-
-// --- Protected & Session Routes ---
-// router.get("/me", isAuthenticated, getCurrentUser);
-// router.get("/logout", logoutUser);
+// --- Facebook Routes ---
+router.get("/facebook", passport.authenticate("facebook", { scope: ["public_profile"] }));
+router.get("/facebook/callback", passport.authenticate("facebook", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
 
 // --- GitHub Routes ---
 router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
+router.get("/github/callback", passport.authenticate("github", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
+
+// --- LinkedIn Routes ---
+router.get("/linkedin", passport.authenticate("linkedin"));
+router.get("/linkedin/callback", passport.authenticate("linkedin", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
+
+// --- Spotify Routes ---
+router.get("/spotify", passport.authenticate("spotify", { scope: ["user-read-email", "user-read-private"], showDialog: true }));
+router.get("/spotify/callback", passport.authenticate("spotify", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
+
+// --- Discord Routes ---
+router.get("/discord", passport.authenticate("discord", { scope: ["identify", "email"] }));
+router.get("/discord/callback", passport.authenticate("discord", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
+
+// --- Slack Routes ---
+router.get("/slack", passport.authenticate("slack", { scope: ["identity.basic", "identity.email"] }));
+router.get("/slack/callback", passport.authenticate("slack", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
+
+// --- GitLab Routes ---
+router.get("/gitlab", passport.authenticate("gitlab", { scope: ["read_user", "api"] }));
+router.get("/gitlab/callback", passport.authenticate("gitlab", { failureRedirect: "/login" }), handleOAuthCallbackSuccess);
+
+// --- X (Twitter) Routes ---
+// --- X (Twitter) Routes ---
 router.get(
-  "/github/callback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
+  "/twitter",
+  passport.authenticate("twitter", {
+    scope: ["users.read", "tweet.read", "offline.access"],
+  })
+);
+
+router.get(
+  "/twitter/callback",
+  passport.authenticate("twitter", { failureRedirect: "/login" }),
   handleOAuthCallbackSuccess
 );
 
-// routes/auth.routes.js
-
-router.get("/linkedin", passport.authenticate("linkedin"));
+// --- Twitch Routes ---
+router.get(
+  "/twitch",
+  passport.authenticate("twitch", {
+    scope: ["user:read:email"],
+  })
+);
 
 router.get(
-  "/linkedin/callback",
-  passport.authenticate("linkedin", { failureRedirect: "/login" }),
+  "/twitch/callback",
+  passport.authenticate("twitch", { failureRedirect: "/login" }),
   handleOAuthCallbackSuccess
 );
 
