@@ -1,0 +1,120 @@
+:root {
+  --bg-color: #0d1117;
+  --card-bg: #161b22;
+  --text-main: #f0f6fc;
+  --text-muted: #8b949e;
+  --border-color: #30363d;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body.dark-theme {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.auth-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 32px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.avatar-placeholder {
+  width: 72px;
+  height: 72px;
+  background-color: #21262d;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px auto;
+  font-size: 28px;
+  color: var(--text-muted);
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.auth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Scrollbar polish for overflow list */
+.auth-buttons::-webkit-scrollbar {
+  width: 6px;
+}
+.auth-buttons::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 3px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  color: #ffffff;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn i {
+  font-size: 18px;
+}
+
+/* OAuth Brand Button Colors */
+.btn-google   { background-color: #ea4335; }
+.btn-facebook { background-color: #1877f2; }
+.btn-x        { background-color: #000000; border: 1px solid var(--border-color); }
+.btn-spotify  { background-color: #1ed760; color: #000; }
+.btn-discord  { background-color: #5865f2; }
+.btn-linkedin { background-color: #0a66c2; }
+.btn-slack    { background-color: #4a154b; }
+.btn-twitch   { background-color: #9146ff; }
+.btn-github   { background-color: #24292e; border: 1px solid var(--border-color); }
+.btn-gitlab   { background-color: #fc6d26; }

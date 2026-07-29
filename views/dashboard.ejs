@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Practice Web App</title>
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="dark-theme">
+  <div class="dashboard-card">
+    <header class="dashboard-header">
+      <h2>Practice Web App</h2>
+      <a href="/auth/logout" class="btn btn-logout">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </a>
+    </header>
+
+    <div class="user-profile">
+      <!-- Profile Picture Container with Fallback -->
+      <div class="avatar-container">
+        <% if (user && user.photos && user.photos[0] && user.photos[0].value) { %>
+          <img 
+            src="<%= user.photos[0].value %>" 
+            alt="Profile Picture" 
+            class="user-avatar"
+            onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="avatar-fallback" style="display: none;">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        <% } else if (user && user.avatar) { %>
+          <img 
+            src="<%= user.avatar %>" 
+            alt="Profile Picture" 
+            class="user-avatar"
+            onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <div class="avatar-fallback" style="display: none;">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        <% } else { %>
+          <div class="avatar-fallback">
+            <i class="fa-solid fa-user"></i>
+          </div>
+        <% } %>
+      </div>
+
+      <!-- User Details -->
+      <h1 class="user-name">
+        <%= (user && (user.displayName || user.name)) || 'Welcome User' %>
+      </h1>
+      
+      <p class="user-email">
+        <%= (user && (user.email || (user.emails && user.emails[0] && user.emails[0].value))) || 'No email provided' %>
+      </p>
+
+      <!-- Provider Badge section -->
+      <div class="provider-info">
+        <span class="label">Authenticated via:</span>
+        <% 
+          let provider = (user && user.provider) ? user.provider.toLowerCase() : 'local';
+          let providerIcons = {
+            google: 'fa-brands fa-google',
+            facebook: 'fa-brands fa-facebook',
+            twitter: 'fa-brands fa-x-twitter',
+            x: 'fa-brands fa-x-twitter',
+            spotify: 'fa-brands fa-spotify',
+            discord: 'fa-brands fa-discord',
+            linkedin: 'fa-brands fa-linkedin-in',
+            slack: 'fa-brands fa-slack',
+            twitch: 'fa-brands fa-twitch',
+            github: 'fa-brands fa-github',
+            gitlab: 'fa-brands fa-gitlab'
+          };
+          let iconClass = providerIcons[provider] || 'fa-solid fa-key';
+        %>
+        <div class="provider-badge provider-<%= provider %>">
+          <i class="<%= iconClass %>"></i>
+          <span><%= provider.toUpperCase() %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

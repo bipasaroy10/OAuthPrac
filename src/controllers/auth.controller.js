@@ -3,10 +3,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 
 export const handleOAuthCallbackSuccess = asyncHandler(async (req, res) => {
-  // Successful OAuth login handler
-  return res
-    .status(200)
-    .json(new ApiResponse(200, req.user, "User logged in successfully"));
+  // Redirect browser to dashboard on successful OAuth callback
+  return res.redirect("/dashboard");
 });
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
@@ -20,8 +18,10 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
     if (err) {
       throw new ApiError(500, "Logout failed", [err.message]);
     }
-    return res
-      .status(200)
-      .json(new ApiResponse(200, {}, "User logged out successfully"));
+    // Destroy session and redirect to login page
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      return res.redirect("/");
+    });
   });
 });
